@@ -1,8 +1,11 @@
-import { Divider, Grid, Toolbar, Typography } from "@mui/material";
-import { DataGrid } from "@mui/x-data-grid"
+import React, { useState } from "react";
+import { Button, Divider, Grid, Stack, Typography } from "@mui/material";
+import { DataGrid } from "@mui/x-data-grid";
+import CallScheduleModalBookingForm from "./CallScheduleModalBookingForm";
 
 const columns = [
-  { field: 'date', headerName: 'Date', width: 70 },
+  { field: 'timeFrom', headerName: 'Time From', width: 100 },
+  { field: 'timeTo', headerName: 'Time To', width: 100 },
   { field: 'title', headerName: 'Title', width: 200 },
   { field: 'name', headerName: 'Name', width: 200 },
   { field: 'firstCall', headerName: '1st Call', width: 200 },
@@ -12,6 +15,16 @@ const columns = [
 ];
 
 const CallScheduleTable = ({ title }: any) => {
+  const [open, setOpen] = useState(false);
+
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   return (
     <div style={{ margin: '2rem 0 2rem 0' }}>
       <Divider variant="fullWidth" />
@@ -20,17 +33,22 @@ const CallScheduleTable = ({ title }: any) => {
           <Typography variant="h5" style={{ marginTop: '1rem'}}>{title}</Typography>
         </Grid>
         <Grid item xs={12}>
+          <Stack direction="row" spacing={2}>
+            <Button variant="contained" size="small" onClick={() => handleOpen()}>Add</Button>
+          </Stack>
+        </Grid>
+        <Grid item xs={12}>
           <DataGrid
             rows={[]}
             columns={columns}
             autoPageSize
             pageSizeOptions={[5, 10, 20]}
             isCellEditable={() => true}
-            slots={{ toolbar: Toolbar }}
             autoHeight
           />
-        </Grid> 
+        </Grid>
       </Grid>
+      <CallScheduleModalBookingForm title={title} open={open} handleClose={handleClose} />
     </div>
   )
 }

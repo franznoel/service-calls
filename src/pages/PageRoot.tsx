@@ -1,10 +1,11 @@
 import { AppBar, Grid, Toolbar, Typography } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
-import dayjs from "dayjs";
+import dayjs, { Dayjs } from "dayjs";
 import CallScheduleTable from "../components/CallScheduleTable";
+import { useState } from "react";
 
 const PageRoot = () => {
-  const now = dayjs();
+  const [now, setNow] = useState<Dayjs|null>(dayjs());
 
   return (
     <div>
@@ -19,15 +20,16 @@ const PageRoot = () => {
         <form>
           <Grid container spacing={2}>
             <Grid item xs={12}>
-              <Typography variant="body1">{now.format('dddd')}</Typography>
-              <DatePicker label="Date" value={now} sx={{ width: 400 }} />
+              <Typography variant="body1">{now?.format('MMMM D, YYYY, dddd')}</Typography>
+              <DatePicker label="Date" value={now} sx={{ width: 400 }} onChange={(date) => setNow(date)}/>
             </Grid>
           </Grid>
         </form>
         <CallScheduleTable title="Anesthesia" />
+        <CallScheduleTable title="Labor and Delivery" />
         <CallScheduleTable title="Operating Room" />
-        <CallScheduleTable title="O.R. Staff/PACU" />
-        <CallScheduleTable title="R.R. Staff" />
+        <CallScheduleTable title="Operating Room Staff/PACU" />
+        <CallScheduleTable title="Recovery Room Staff" />
       </div>
     </div>
   );
