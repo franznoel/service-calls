@@ -3,14 +3,23 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
-import PageRoot from './pages/PageRoot';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
+import PageSchedule from './pages/PageSchedule';
+import PageDirectory from './pages/PageDirectory';
 
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <PageRoot />,
+    element: <PageSchedule />,
+  },
+  {
+    path: '/schedules',
+    element: <PageSchedule />,
+  },
+  {
+    path: '/directory',
+    element: <PageDirectory />,
   },
 ]);
 
