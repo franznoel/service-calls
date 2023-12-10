@@ -1,7 +1,4 @@
 {
-  "projects": {
-    "default": "pang-service-calls"
-  },
   "hosting": {
     "public": "build",
     "ignore": [
@@ -9,5 +6,9 @@
       "**/.*",
       "**/node_modules/**"
     ]
+  },
+  "firestore": {
+    "rules": "firestore.rules",
+    "indexes": "firestore.indexes.json"
   }
 }
