@@ -1,10 +1,18 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Autocomplete, Button, Grid, MenuItem, Select, TextField } from "@mui/material"
 import CallScheduleModal from "./CallScheduleModal";
 import dayjs, { Dayjs } from "dayjs";
 import { iSearch, searchEmployee } from "../models/firestore/employee";
 import { TimePicker } from "@mui/x-date-pickers";
 import { saveSchedule } from "../models/firestore/schedule";
+
+const departmentMapping: Record<string, string> = {
+  'Anesthesia': 'anesthesia',
+  'Labor and Delivery': 'laborAndDelivery',
+  'Operating Room': 'operatingRoom',
+  'Operating Room Staff/PACU': 'pacu',
+  'Recovery Room Staff': 'recoveryRoom',
+}
 
 const CallScheduleModalBookingForm = ({ date, title, open, handleClose }: any) => {
   const [timeFrom, setTimeFrom] = useState<Dayjs>(dayjs());
@@ -16,16 +24,18 @@ const CallScheduleModalBookingForm = ({ date, title, open, handleClose }: any) =
   const [employeeId, setEmployeeId] = useState('');
 
   const submitHandler = () => {
-    saveSchedule({
-      date,
-      anesthesia: [
+    const schedule = {
+      date: date.format('YYYY-MM-DD'),
+      [departmentMapping[title]]: [
         {
           timeFrom: timeFrom.format('HH:mm'),
           timeTo: timeTo.format('HH:mm'),
           employeeId
         }
       ]
-    });
+    }
+    console.log('schedule', schedule);
+    saveSchedule(schedule);
   }
 
   const handleSearch = (value: string) => {

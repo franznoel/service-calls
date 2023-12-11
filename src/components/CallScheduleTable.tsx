@@ -14,7 +14,7 @@ const columns = [
   { field: 'timeResponded', headerName: 'Time Responded', width: 200 },
 ];
 
-const CallScheduleTable = ({ title }: any) => {
+const CallScheduleTable = ({ date, title }: any) => {
   const [open, setOpen] = useState(false);
 
   const handleOpen = () => {
@@ -48,7 +48,7 @@ const CallScheduleTable = ({ title }: any) => {
           />
         </Grid>
       </Grid>
-      <CallScheduleModalBookingForm title={title} open={open} handleClose={handleClose} />
+      <CallScheduleModalBookingForm date={date} title={title} open={open} handleClose={handleClose} />
     </div>
   )
 }
