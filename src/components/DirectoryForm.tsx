@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Button, Grid, MenuItem, Select, TextField } from "@mui/material"
 import CallScheduleModal from "./CallScheduleModal";
+import { saveEmployee } from "../models/firestore/employee";
 
 const DirectoryForm = ({ title, open, handleClose }: any) => {
   const [fullName, setFullName] = useState('');
@@ -8,9 +9,22 @@ const DirectoryForm = ({ title, open, handleClose }: any) => {
   const [phone2, setPhone2] = useState('');
   const [employmentStatus, setEmploymentStatus] = useState<string>('fullTime');
 
+  const handleSubmit = (e: any) => {
+    e.preventDefault();
+    const employee = {
+      fullName,
+      phone1,
+      phone2,
+      employmentStatus
+    };
+    console.log('submit', employee);
+    saveEmployee(employee)
+    handleClose();
+  }
+
   return (
     <CallScheduleModal title={title} open={open} handleClose={handleClose}>
-      <form>
+      <form onSubmit={handleSubmit}>
         <Grid container spacing={2}>
           <Grid item xs={12}>
             <TextField label="Full Name" onChange={(e: any) => setFullName(e.target.value)} value={fullName} fullWidth/>
