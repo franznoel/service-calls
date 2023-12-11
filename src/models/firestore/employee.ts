@@ -1,5 +1,5 @@
 import { firestoreDb } from "../../config/firebase";
-import { addDoc, collection, getDocs } from "firebase/firestore";
+import { addDoc, collection, deleteDoc, doc, getDocs } from "firebase/firestore";
 
 interface iEmployee {
   fullName: string
@@ -10,7 +10,6 @@ interface iEmployee {
 
 export const saveEmployee = async (data: iEmployee) => {
   const employeeRef = await addDoc(collection(firestoreDb, "employees"), data);
-  console.log('employeeRef: ', employeeRef);
   return employeeRef;
 }
 
@@ -25,4 +24,8 @@ export const getEmployees = async () => {
     });
   });
   return employees;
+}
+
+export const deleteEmployee = async (id: string) => {
+  await deleteDoc(doc(firestoreDb, "employees", id));
 }

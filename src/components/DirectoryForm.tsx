@@ -17,7 +17,6 @@ const DirectoryForm = ({ title, open, handleClose }: any) => {
       phone2,
       employmentStatus
     };
-    console.log('submit', employee);
     saveEmployee(employee)
     handleClose();
   }
