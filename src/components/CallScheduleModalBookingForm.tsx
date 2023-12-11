@@ -1,15 +1,24 @@
-import { Button, Grid, MenuItem, Select, TextField } from "@mui/material"
+import React, { useState, useEffect } from "react";
+import { Autocomplete, Button, Grid, MenuItem, Select, TextField } from "@mui/material"
 import CallScheduleModal from "./CallScheduleModal";
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
-import { useState } from "react";
 import dayjs, { Dayjs } from "dayjs";
+import { searchEmployee } from "../models/firestore/employee";
 
 const CallScheduleModalBookingForm = ({ title, open, handleClose }: any) => {
   const [timeFrom, setTimeFrom] = useState<Dayjs>(dayjs());
   const [timeTo, setTimeTo] = useState<Dayjs>(dayjs());
-  const [fullName, setFullName] = useState('');
   const [position, setPosition] = useState<string>('RN');
+  const [searchedEmployees, setSearchedEmployees] = useState<any[]>([]);
+  const [fullName, setFullName] = useState('');
+  const [inputValue, setInputValue] = useState('');
 
+  useEffect(() => {
+    searchEmployee(fullName).then((employees: any) => {
+      setSearchedEmployees(employees);
+    });
+  }, [fullName]);
+  
   return (
     <CallScheduleModal title={title} open={open} handleClose={handleClose}>
       <form>
@@ -32,7 +41,13 @@ const CallScheduleModalBookingForm = ({ title, open, handleClose }: any) => {
             </Select>
           </Grid>
           <Grid item xs={12}>
-            <TextField label="Full Name" value={fullName} onChange={(e)=>setFullName(e.target.value)} fullWidth/>
+            <Autocomplete
+              options={searchedEmployees}
+              renderInput={(params) => <TextField {...params} label="Name" />}
+              onChange={(e, value) => setFullName(value)}
+              inputValue={inputValue}
+              onInputChange={(e, value) => setInputValue(value)}
+            />
           </Grid>
           <Grid item xs={12}>
             <Button variant="contained" size="small" type="submit" style={{ marginTop: '1rem' }}>Save</Button>

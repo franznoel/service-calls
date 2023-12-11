@@ -29,3 +29,17 @@ export const getEmployees = async () => {
 export const deleteEmployee = async (id: string) => {
   await deleteDoc(doc(firestoreDb, "employees", id));
 }
+
+export const searchEmployee = async (searchText: string) => {
+  const employeesRef = collection(firestoreDb, "employees");
+  const employeesSnapshot = await getDocs(employeesRef);
+  const employees: any[] = [];
+  employeesSnapshot.forEach((employee) => {
+    if (employee.data().fullName.toLowerCase().includes(searchText.toLowerCase())) {
+      if (employees.length < 10) {
+        employees.push(employee.data().fullName);
+      }
+    }
+  });
+  return employees;
+}
