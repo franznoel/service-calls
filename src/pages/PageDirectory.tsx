@@ -4,15 +4,18 @@ import CustomTabs from "../components/CustomTabs";
 import { Button, Grid, Stack, Typography } from "@mui/material";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import DirectoryForm from "../components/DirectoryForm";
+import { getEmployees } from "../models/firestore/employee";
+import { useLoaderData } from "react-router-dom";
 
 const columns = [
-  { field: 'nameFull', headerName: 'Full Name', width: 300 },
-  { field: 'phone1', headerName: 'Phone 1' },
-  { field: 'phone2', headerName: 'Phone 2' },
+  { field: 'fullName', headerName: 'Full Name', width: 300 },
+  { field: 'phone1', headerName: 'Phone 1', width: 200 },
+  { field: 'phone2', headerName: 'Phone 2', width: 200 },
   { field: 'employmentStatus', headerName: 'Employment Status', width: 300 },
-]
+];
 
 const PageDirectory = () => {
+  const data: any = useLoaderData();
   const [open, setOpen] = useState(false);
 
   const handleOpen = () => {
@@ -39,13 +42,12 @@ const PageDirectory = () => {
           </Grid>
           <Grid item xs={12}>
             <DataGrid
-              rows={[]}
               columns={columns}
-              autoPageSize
+              rows={data.employees ?? []}
               pageSizeOptions={[5, 10, 20]}
               isCellEditable={() => true}
-              autoHeight
               slots={{ toolbar: GridToolbar}}
+              autoHeight
             />
           </Grid>
         </Grid>
@@ -53,6 +55,11 @@ const PageDirectory = () => {
       </div>
     </div>
   )  
+}
+
+export const directoryLoader = async () => {
+  const employees = await getEmployees();
+  return { employees };
 }
 
 export default PageDirectory;

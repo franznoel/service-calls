@@ -6,7 +6,7 @@ import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import PageSchedule from './pages/PageSchedule';
-import PageDirectory from './pages/PageDirectory';
+import PageDirectory, { directoryLoader } from './pages/PageDirectory';
 
 const router = createBrowserRouter([
   {
@@ -20,6 +20,7 @@ const router = createBrowserRouter([
   {
     path: '/directory',
     element: <PageDirectory />,
+    loader: directoryLoader,
   },
 ]);
 
