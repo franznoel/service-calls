@@ -6,14 +6,6 @@ import { iSearch, searchEmployee } from "../models/firestore/employee";
 import { TimePicker } from "@mui/x-date-pickers";
 import { saveSchedule } from "../models/firestore/schedule";
 
-const departmentMapping: Record<string, string> = {
-  'Anesthesia': 'anesthesia',
-  'Labor and Delivery': 'laborAndDelivery',
-  'Operating Room': 'operatingRoom',
-  'Operating Room Staff/PACU': 'pacu',
-  'Recovery Room Staff': 'recoveryRoom',
-}
-
 const CallScheduleModalBookingForm = ({ date, title, open, handleClose }: any) => {
   const [timeFrom, setTimeFrom] = useState<Dayjs>(dayjs());
   const [timeTo, setTimeTo] = useState<Dayjs>(dayjs());
@@ -21,16 +13,16 @@ const CallScheduleModalBookingForm = ({ date, title, open, handleClose }: any) =
   const [searchedEmployees, setSearchedEmployees] = useState<any[]>([]);
   const [searchValue, setSearchValue] = useState<null|iSearch>(null);
   const [inputValue, setInputValue] = useState('');
-  const [employeeId, setEmployeeId] = useState('');
 
   const submitHandler = () => {
     const schedule = {
       date: date.format('YYYY-MM-DD'),
-      [departmentMapping[title]]: [
+      schedules: [
         {
           timeFrom: timeFrom.format('HH:mm'),
           timeTo: timeTo.format('HH:mm'),
-          employeeId
+          title: position,
+          employeeId: searchedEmployees[0].id
         }
       ]
     }
