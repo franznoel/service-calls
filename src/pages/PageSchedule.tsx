@@ -7,7 +7,7 @@ import CustomAppBar from "../components/CustomAppBar";
 import CustomTabs from "../components/CustomTabs";
 
 const PageRoot = () => {
-  const [now, setNow] = useState<Dayjs|null>(dayjs());
+  const [date, setDate] = useState<Dayjs|null>(dayjs());
 
   return (
     <div>
@@ -16,15 +16,15 @@ const PageRoot = () => {
       <div style={{ margin: '1rem' }}>
         <Grid container spacing={2}>
           <Grid item xs={12}>
-            <Typography variant="body1">{now?.format('MMMM D, YYYY, dddd')}</Typography>
-            <DatePicker label="Date" value={now} sx={{ width: 400 }} onChange={(date) => setNow(date)}/>
+            <Typography variant="body1">{date?.format('MMMM D, YYYY, dddd')}</Typography>
+            <DatePicker label="Date" value={date} sx={{ width: 400 }} onChange={(newDate) => setDate(newDate)}/>
           </Grid>
         </Grid>
-        <CallScheduleTable title="Anesthesia" />
-        <CallScheduleTable title="Labor and Delivery" />
-        <CallScheduleTable title="Operating Room" />
-        <CallScheduleTable title="Operating Room Staff/PACU" />
-        <CallScheduleTable title="Recovery Room Staff" />
+        <CallScheduleTable title="Anesthesia" date={date}/>
+        <CallScheduleTable title="Labor and Delivery" date={date}/>
+        <CallScheduleTable title="Operating Room" date={date}/>
+        <CallScheduleTable title="Operating Room Staff/PACU" date={date}/>
+        <CallScheduleTable title="Recovery Room Staff" date={date}/>
       </div>
     </div>
   );

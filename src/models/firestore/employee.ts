@@ -8,6 +8,11 @@ interface iEmployee {
   employmentStatus: string
 }
 
+export interface iSearch {
+  id: string
+  label: string
+}
+
 export const saveEmployee = async (data: iEmployee) => {
   const employeeRef = await addDoc(collection(firestoreDb, "employees"), data);
   return employeeRef;
@@ -30,14 +35,18 @@ export const deleteEmployee = async (id: string) => {
   await deleteDoc(doc(firestoreDb, "employees", id));
 }
 
-export const searchEmployee = async (searchText: string) => {
+export const searchEmployee = async (searchValue: null|iSearch) => {
+  if (!searchValue) return [];
   const employeesRef = collection(firestoreDb, "employees");
   const employeesSnapshot = await getDocs(employeesRef);
   const employees: any[] = [];
   employeesSnapshot.forEach((employee) => {
-    if (employee.data().fullName.toLowerCase().includes(searchText.toLowerCase())) {
+    if (employee.data().fullName.toLowerCase().includes(searchValue?.label.toLowerCase())) {
       if (employees.length < 10) {
-        employees.push(employee.data().fullName);
+        employees.push({
+          id: employee.id,
+          label: employee.data().fullName,
+        });
       }
     }
   });

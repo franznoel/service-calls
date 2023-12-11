@@ -1,33 +1,49 @@
 import React, { useState, useEffect } from "react";
 import { Autocomplete, Button, Grid, MenuItem, Select, TextField } from "@mui/material"
 import CallScheduleModal from "./CallScheduleModal";
-import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import dayjs, { Dayjs } from "dayjs";
-import { searchEmployee } from "../models/firestore/employee";
+import { iSearch, searchEmployee } from "../models/firestore/employee";
+import { TimePicker } from "@mui/x-date-pickers";
+import { saveSchedule } from "../models/firestore/schedule";
 
-const CallScheduleModalBookingForm = ({ title, open, handleClose }: any) => {
+const CallScheduleModalBookingForm = ({ date, title, open, handleClose }: any) => {
   const [timeFrom, setTimeFrom] = useState<Dayjs>(dayjs());
   const [timeTo, setTimeTo] = useState<Dayjs>(dayjs());
   const [position, setPosition] = useState<string>('RN');
   const [searchedEmployees, setSearchedEmployees] = useState<any[]>([]);
-  const [fullName, setFullName] = useState('');
+  const [searchValue, setSearchValue] = useState<null|iSearch>(null);
   const [inputValue, setInputValue] = useState('');
+  const [employeeId, setEmployeeId] = useState('');
 
-  useEffect(() => {
-    searchEmployee(fullName).then((employees: any) => {
+  const submitHandler = () => {
+    saveSchedule({
+      date,
+      anesthesia: [
+        {
+          timeFrom: timeFrom.format('HH:mm'),
+          timeTo: timeTo.format('HH:mm'),
+          employeeId
+        }
+      ]
+    });
+  }
+
+  const handleSearch = (value: string) => {
+    setInputValue(value);
+    searchEmployee({ id: '', label: value }).then((employees: any) => {
       setSearchedEmployees(employees);
     });
-  }, [fullName]);
-  
+  }
+
   return (
     <CallScheduleModal title={title} open={open} handleClose={handleClose}>
-      <form>
+      <form onSubmit={submitHandler}>
         <Grid container spacing={2}>
           <Grid item xs={12}>
-            <DateTimePicker label="Time From" onChange={(value: any)=>setTimeFrom(value)} value={timeFrom} />
+            <TimePicker label="Time From" onChange={(value: any)=>setTimeFrom(value)} value={timeFrom} />
           </Grid>
           <Grid item xs={12}>
-            <DateTimePicker label="Time To" onChange={(value: any)=>setTimeTo(value)} value={timeTo}/>
+            <TimePicker label="Time To" onChange={(value: any)=>setTimeTo(value)} value={timeTo}/>
           </Grid>
           <Grid item xs={12}>
             <Select value={position} label="Title" onChange={(e)=>setPosition(e.target.value)} fullWidth>
@@ -43,10 +59,12 @@ const CallScheduleModalBookingForm = ({ title, open, handleClose }: any) => {
           <Grid item xs={12}>
             <Autocomplete
               options={searchedEmployees}
+              value={searchValue}
               renderInput={(params) => <TextField {...params} label="Name" />}
-              onChange={(e, value) => setFullName(value)}
+              onChange={(e, value) => setSearchValue(value)}
               inputValue={inputValue}
-              onInputChange={(e, value) => setInputValue(value)}
+              onInputChange={(e, value) => handleSearch(value)}
+              isOptionEqualToValue={(option, value) => option.id === value.id}
             />
           </Grid>
           <Grid item xs={12}>
