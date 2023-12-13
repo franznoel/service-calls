@@ -7,14 +7,14 @@ const columns = [
   { field: 'timeFrom', headerName: 'Time From', width: 100 },
   { field: 'timeTo', headerName: 'Time To', width: 100 },
   { field: 'title', headerName: 'Title', width: 200 },
-  { field: 'name', headerName: 'Name', width: 200 },
+  { field: 'fullName', headerName: 'Name', width: 200 },
   { field: 'firstCall', headerName: '1st Call', width: 200 },
   { field: 'secondCall', headerName: '2nd Call', width: 200 },
   { field: 'calledBy', headerName: 'Called By', width: 200 },
   { field: 'timeResponded', headerName: 'Time Responded', width: 200 },
 ];
 
-const CallScheduleTable = ({ date, title }: any) => {
+const CallScheduleTable = ({ date, title, data, existingSchedules }: any) => {
   const [open, setOpen] = useState(false);
 
   const handleOpen = () => {
@@ -39,7 +39,7 @@ const CallScheduleTable = ({ date, title }: any) => {
         </Grid>
         <Grid item xs={12}>
           <DataGrid
-            rows={[]}
+            rows={data}
             columns={columns}
             pageSizeOptions={[5, 10, 20, 100]}
             isCellEditable={() => true}
@@ -47,7 +47,13 @@ const CallScheduleTable = ({ date, title }: any) => {
           />
         </Grid>
       </Grid>
-      <CallScheduleModalBookingForm date={date} title={title} open={open} handleClose={handleClose} />
+      <CallScheduleModalBookingForm
+        date={date}
+        title={title}
+        open={open}
+        handleClose={handleClose}
+        existingSchedules={existingSchedules}
+      />
     </div>
   )
 }

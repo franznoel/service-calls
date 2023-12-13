@@ -4,30 +4,31 @@ import dayjs, { Dayjs } from "dayjs";
 import CallScheduleTable from "../components/CallScheduleTable";
 import CustomAppBar from "../components/CustomAppBar";
 import CustomTabs from "../components/CustomTabs";
-import { getSchedulesByDate } from "../models/firestore/schedule";
+import { Departments, getSchedulesByDate } from "../models/firestore/schedule";
 import { useEffect, useState } from "react";
 
 const PageScheduler = () => {
   const [date, setDate] = useState<Dayjs>(dayjs());
   const [schedules, setSchedules] = useState<any>(null);
-  const [anesthesiaSchedules, setAnesthesiaSchedules] = useState([]);
-  const [laborAndDeliverySchedules, setLaborAndDeliverySchedules] = useState([]);
-  const [operatingRoomSchedules, setOperatingRoomSchedules] = useState([]);
-  const [pacuSchedules, setPacuSchedules] = useState([])
-  const [recoveryRoomSchedules, setRecoveryRoomSchedules] = useState([]);
 
   useEffect(() => {
     const givenDate = date.format('YYYY-MM-DD');
     getSchedulesByDate(givenDate).then((scheduleDoc: any) => {
-      console.log('schedules', givenDate, schedules);
       if (!schedules || (schedules.date !== givenDate)) {
         setSchedules(scheduleDoc.data());
       }
     });
   }, [date, schedules])
 
-  console.log('schedules', schedules);
-  
+  const anesthesiaSchedules = schedules?.schedules.filter((schedule: any) => schedule.department === Departments.ANESTHESIA) ?? [];
+  const laborAndDeliverySchedules = schedules?.schedules.filter((schedule: any) => schedule.department === Departments.LABOR_AND_DELIVERY) ?? [];
+  const operatingRoomSchedules = schedules?.schedules.filter((schedule: any) => schedule.department === Departments.OPERATING_ROOM) ?? [];
+  const pacuSchedules = schedules?.schedules.filter((schedule: any) => schedule.department === Departments.PACU) ?? [];
+  const recoveryRoomSchedules = schedules?.schedules.filter((schedule: any) => schedule.department === Departments.RECOVERY_ROOM) ?? [];
+  const existingSchedules = schedules && (schedules?.schedules ?? []);
+
+  console.log('anesthesiaSchedules', anesthesiaSchedules);
+
   return (
     <div>
       <CustomAppBar />
@@ -39,11 +40,11 @@ const PageScheduler = () => {
             <DatePicker label="Date" value={date} sx={{ width: 400 }} onChange={(newDate: any) => setDate(newDate)}/>
           </Grid>
         </Grid>
-        <CallScheduleTable title="Anesthesia" date={date} data={anesthesiaSchedules}/>
-        <CallScheduleTable title="Labor and Delivery" date={date} data={laborAndDeliverySchedules}/>
-        <CallScheduleTable title="Operating Room" date={date} data={operatingRoomSchedules}/>
-        <CallScheduleTable title="Operating Room Staff/PACU" date={date} data={pacuSchedules}/>
-        <CallScheduleTable title="Recovery Room Staff" date={date} data={recoveryRoomSchedules}/>
+        <CallScheduleTable title={Departments.ANESTHESIA} date={date} data={anesthesiaSchedules} existingSchedules={existingSchedules} />
+        <CallScheduleTable title={Departments.LABOR_AND_DELIVERY} date={date} data={laborAndDeliverySchedules} existingSchedules={existingSchedules}/>
+        <CallScheduleTable title={Departments.OPERATING_ROOM} date={date} data={operatingRoomSchedules} existingSchedules={existingSchedules}/>
+        <CallScheduleTable title={Departments.PACU} date={date} data={pacuSchedules} existingSchedules={existingSchedules}/>
+        <CallScheduleTable title={Departments.RECOVERY_ROOM} date={date} data={recoveryRoomSchedules} existingSchedules={existingSchedules}/>
       </div>
     </div>
   );

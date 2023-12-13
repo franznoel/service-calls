@@ -5,8 +5,10 @@ import dayjs, { Dayjs } from "dayjs";
 import { iSearch, searchEmployee } from "../models/firestore/employee";
 import { TimePicker } from "@mui/x-date-pickers";
 import { saveSchedule } from "../models/firestore/schedule";
+import { useNavigate } from "react-router-dom";
 
-const CallScheduleModalBookingForm = ({ date, title, open, handleClose }: any) => {
+const CallScheduleModalBookingForm = ({ date, title, open, handleClose, existingSchedules }: any) => {
+  const navigate = useNavigate();
   const [timeFrom, setTimeFrom] = useState<Dayjs>(dayjs());
   const [timeTo, setTimeTo] = useState<Dayjs>(dayjs());
   const [position, setPosition] = useState<string>('RN');
@@ -14,7 +16,8 @@ const CallScheduleModalBookingForm = ({ date, title, open, handleClose }: any) =
   const [searchValue, setSearchValue] = useState<null|iSearch>(null);
   const [inputValue, setInputValue] = useState('');
 
-  const submitHandler = () => {
+  const submitHandler = (e: any) => {
+    e.preventDefault()
     const schedule = {
       date: date.format('YYYY-MM-DD'),
       schedules: [
@@ -22,16 +25,19 @@ const CallScheduleModalBookingForm = ({ date, title, open, handleClose }: any) =
           timeFrom: timeFrom.format('HH:mm'),
           timeTo: timeTo.format('HH:mm'),
           title: position,
+          id:  searchedEmployees[0].id,
           employeeId: searchedEmployees[0].id,
           fullName: searchedEmployees[0].label,
           department: title,
           firstCall: searchedEmployees[0].phone1,
           secondCall: searchedEmployees[0].phone2,
-        }
+        },
+        ...existingSchedules
       ]
     }
     console.log('schedule', schedule);
     saveSchedule(schedule);
+    navigate(0);
   }
 
   const handleSearch = (value: string) => {

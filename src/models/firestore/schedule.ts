@@ -6,6 +6,10 @@ export interface iAssignedEmployee {
   timeFrom: string
   timeTo: string
   employeeId: string
+  fullName: string
+  firstCall: string
+  secondCall: string
+  title: string
 }
 
 export interface iSchedule {
