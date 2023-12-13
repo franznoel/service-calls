@@ -20,11 +20,11 @@ const PageScheduler = () => {
     });
   }, [date, schedules])
 
-  const anesthesiaSchedules = schedules?.schedules.filter((schedule: any) => schedule.department === Departments.ANESTHESIA) ?? [];
-  const laborAndDeliverySchedules = schedules?.schedules.filter((schedule: any) => schedule.department === Departments.LABOR_AND_DELIVERY) ?? [];
-  const operatingRoomSchedules = schedules?.schedules.filter((schedule: any) => schedule.department === Departments.OPERATING_ROOM) ?? [];
-  const pacuSchedules = schedules?.schedules.filter((schedule: any) => schedule.department === Departments.PACU) ?? [];
-  const recoveryRoomSchedules = schedules?.schedules.filter((schedule: any) => schedule.department === Departments.RECOVERY_ROOM) ?? [];
+  const anesthesiaSchedules = schedules?.schedules?.filter((schedule: any) => schedule.department === Departments.ANESTHESIA) ?? [];
+  const laborAndDeliverySchedules = schedules?.schedules?.filter((schedule: any) => schedule.department === Departments.LABOR_AND_DELIVERY) ?? [];
+  const operatingRoomSchedules = schedules?.schedules?.filter((schedule: any) => schedule.department === Departments.OPERATING_ROOM) ?? [];
+  const pacuSchedules = schedules?.schedules?.filter((schedule: any) => schedule.department === Departments.PACU) ?? [];
+  const recoveryRoomSchedules = schedules?.schedules?.filter((schedule: any) => schedule.department === Departments.RECOVERY_ROOM) ?? [];
   const existingSchedules = schedules && (schedules?.schedules ?? []);
 
   console.log('anesthesiaSchedules', anesthesiaSchedules);

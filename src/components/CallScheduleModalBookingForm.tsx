@@ -38,13 +38,7 @@ const CallScheduleModalBookingForm = ({ date, title, open, handleClose, existing
       ]
     }
 
-    const isExisting = existingSchedules
-      .map((sched: any) => sched.id === newSchedule.id && sched.department === newSchedule.department)
-
-    if (!isExisting) {
-      saveSchedule(schedule);
-    }
-
+    saveSchedule(schedule);
     navigate(0);
   }
 
