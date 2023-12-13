@@ -18,25 +18,33 @@ const CallScheduleModalBookingForm = ({ date, title, open, handleClose, existing
 
   const submitHandler = (e: any) => {
     e.preventDefault()
+    const newSchedule = {
+      timeFrom: timeFrom.format('HH:mm'),
+      timeTo: timeTo.format('HH:mm'),
+      title: position,
+      id:  searchedEmployees[0].id,
+      employeeId: searchedEmployees[0].id,
+      fullName: searchedEmployees[0].label,
+      department: title,
+      firstCall: searchedEmployees[0].phone1,
+      secondCall: searchedEmployees[0].phone2,
+    };
+
     const schedule = {
       date: date.format('YYYY-MM-DD'),
       schedules: [
-        {
-          timeFrom: timeFrom.format('HH:mm'),
-          timeTo: timeTo.format('HH:mm'),
-          title: position,
-          id:  searchedEmployees[0].id,
-          employeeId: searchedEmployees[0].id,
-          fullName: searchedEmployees[0].label,
-          department: title,
-          firstCall: searchedEmployees[0].phone1,
-          secondCall: searchedEmployees[0].phone2,
-        },
+        newSchedule,
         ...existingSchedules
       ]
     }
-    console.log('schedule', schedule);
-    saveSchedule(schedule);
+
+    const isExisting = existingSchedules
+      .map((sched: any) => sched.id === newSchedule.id && sched.department === newSchedule.department)
+
+    if (!isExisting) {
+      saveSchedule(schedule);
+    }
+
     navigate(0);
   }
 
