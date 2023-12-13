@@ -4,7 +4,7 @@ import dayjs, { Dayjs } from "dayjs";
 import CallScheduleTable from "../components/CallScheduleTable";
 import CustomAppBar from "../components/CustomAppBar";
 import CustomTabs from "../components/CustomTabs";
-import { Departments, getSchedulesByDate, iAssignedEmployee, iSchedule } from "../models/firestore/schedule";
+import { getSchedulesByDate } from "../models/firestore/schedule";
 import { useEffect, useState } from "react";
 
 const PageScheduler = () => {

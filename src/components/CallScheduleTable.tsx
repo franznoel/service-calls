@@ -41,8 +41,7 @@ const CallScheduleTable = ({ date, title }: any) => {
           <DataGrid
             rows={[]}
             columns={columns}
-            autoPageSize
-            pageSizeOptions={[5, 10, 20]}
+            pageSizeOptions={[5, 10, 20, 100]}
             isCellEditable={() => true}
             autoHeight
           />

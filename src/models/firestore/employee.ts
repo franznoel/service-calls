@@ -52,6 +52,8 @@ export const searchEmployee = async (searchValue: null|iSearch) => {
         employees.push({
           id: employee.id,
           label: employee.data().fullName,
+          phone1: employee.data().phone1,
+          phone2: employee.data().phone2,
         });
       }
     }
