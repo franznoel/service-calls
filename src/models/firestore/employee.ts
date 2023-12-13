@@ -1,7 +1,7 @@
 import { firestoreDb } from "../../config/firebase";
-import { addDoc, collection, deleteDoc, doc, getDocs } from "firebase/firestore";
+import { addDoc, collection, deleteDoc, doc, getDocs, getDoc } from "firebase/firestore";
 
-interface iEmployee {
+export interface iEmployee {
   fullName: string
   phone1: string
   phone2: string
@@ -29,6 +29,12 @@ export const getEmployees = async () => {
     });
   });
   return employees;
+}
+
+export const getEmployeeById = async (id: string) => {
+  const employeeRef = doc(firestoreDb, "employees", id);
+  const employeeSnap = await getDoc(employeeRef);
+  return employeeSnap.data();
 }
 
 export const deleteEmployee = async (id: string) => {

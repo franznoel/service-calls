@@ -1,19 +1,24 @@
 import { firestoreDb } from "../../config/firebase";
-import { setDoc, collection, doc, getDocs } from "firebase/firestore";
+import { setDoc, doc, getDoc } from "firebase/firestore";
 
-interface iAssignedEmployee {
+export interface iAssignedEmployee {
+  id?: string
   timeFrom: string
   timeTo: string
   employeeId: string
 }
 
-interface iSchedule {
+export interface iSchedule {
   date: string
-  anesthesia?: iAssignedEmployee[]
-  laborAndDelivery?: iAssignedEmployee[]
-  operatingRoom?: iAssignedEmployee[]
-  pacu?: iAssignedEmployee[]
-  recoveryRoom?: iAssignedEmployee[]
+  employeeSchedules?: iAssignedEmployee[]
+}
+
+export enum Departments {
+  ANESTHESIA = "Anesthesia",
+  LABOR_AND_DELIVERY = "Labor and Delivery",
+  OPERATING_ROOM = "Operating Room",
+  PACU = 'Operating Room Staff/PACU',
+  RECOVERY_ROOM = 'Recovery Room Staff',
 }
 
 export const saveSchedule = async (data: iSchedule) => {
@@ -22,15 +27,7 @@ export const saveSchedule = async (data: iSchedule) => {
   return scheduleRef;
 }
 
-export const getSchedules = async () => {
-  const schedulesRef = collection(firestoreDb, "schedules");
-  const schedulesSnapshot = await getDocs(schedulesRef);
-  const schedules: any[] = [];
-  schedulesSnapshot.forEach((schedule) => {
-    schedules.push({
-      id: schedule.id,
-      ...schedule.data(),
-    });
-  });
-  return schedules;
+export const getSchedulesByDate = (date: string) => {
+  const schedulesRef = doc(firestoreDb, "schedules", date);
+  return getDoc(schedulesRef);
 }
