@@ -1,5 +1,5 @@
 import { firestoreDb } from "../../config/firebase";
-import { setDoc, doc, getDoc, getDocs, collection } from "firebase/firestore";
+import { setDoc, doc, getDocs, collection, deleteDoc } from "firebase/firestore";
 
 export interface iAssignedEmployee {
   id?: string
@@ -31,6 +31,10 @@ export const saveSchedule = (date: string, data: iAssignedEmployee) => {
   return setDoc(schedulesRef, data);
 }
 
+export const deleteSchedule = async (date: string, department: string, employeeId: string) => {
+  return await deleteDoc(doc(firestoreDb, "schedules", date, department, employeeId));
+}
+
 export const getDepartmentSchedulesByDate = async (date: string, department: string) => {
   const departmentSchedulesRef = getDocs(collection(firestoreDb, "schedules", date, department))
     .then((departmentSchedSnap) => {
@@ -40,5 +44,4 @@ export const getDepartmentSchedulesByDate = async (date: string, department: str
       return departmentSchedSnap.docs.map((doc) => doc.data() as iAssignedEmployee)
     });
   return departmentSchedulesRef;
-
 }

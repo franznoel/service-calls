@@ -9,6 +9,7 @@ import {useState } from "react";
 
 const PageScheduler = () => {
   const [date, setDate] = useState<Dayjs>(dayjs());
+  const dateString = dayjs(date).format('MMMM D, YYYY, dddd');
 
   return (
     <div>
@@ -17,7 +18,7 @@ const PageScheduler = () => {
       <div style={{ margin: '1rem' }}>
         <Grid container spacing={2}>
           <Grid item xs={12}>
-            <Typography variant="body1">{dayjs(date).format('MMMM D, YYYY, dddd')}</Typography>
+            <Typography variant="body1">{dateString}</Typography>
             <DatePicker label="Date" value={date} sx={{ width: 400 }} onChange={(newDate: any) => setDate(newDate)}/>
           </Grid>
         </Grid>

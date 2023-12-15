@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Button, Divider, Grid, Stack, Typography } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import CallScheduleModalBookingForm from "./CallScheduleModalBookingForm";
-import { getDepartmentSchedulesByDate, iAssignedEmployee } from "../models/firestore/schedule";
+import { deleteSchedule, getDepartmentSchedulesByDate, iAssignedEmployee } from "../models/firestore/schedule";
 
 const columns = [
   { field: 'timeFrom', headerName: 'Time From', width: 100 },
@@ -18,6 +18,7 @@ const columns = [
 const CallScheduleTable = ({ date, department }: any) => {
   const [open, setOpen] = useState(false);
   const [schedules, setSchedules] = useState<iAssignedEmployee[]>([]);
+  const [selectedId, setSelectedId] = useState<string>('');
   const dateString = date.format('YYYY-MM-DD');
 
   const handleOpen = () => {
@@ -27,6 +28,12 @@ const CallScheduleTable = ({ date, department }: any) => {
   const handleClose = () => {
     setOpen(false);
   };
+
+  const handleDelete = () => {
+    deleteSchedule(dateString, department, selectedId).then(() => {
+      setSchedules(schedules.filter((schedule) => schedule.id !== selectedId));
+    });
+  }
 
   useEffect(() => {
     getDepartmentSchedulesByDate(dateString, department)
@@ -44,7 +51,8 @@ const CallScheduleTable = ({ date, department }: any) => {
         </Grid>
         <Grid item xs={12}>
           <Stack direction="row" spacing={2}>
-            <Button variant="contained" size="small" onClick={() => handleOpen()}>Add</Button>
+            <Button variant="contained" size="small" onClick={() => handleOpen()}>Add or Update</Button>
+            <Button variant="contained" size="small" onClick={() => handleDelete()}>Delete</Button>
           </Stack>
         </Grid>
         <Grid item xs={12}>
@@ -53,6 +61,7 @@ const CallScheduleTable = ({ date, department }: any) => {
             columns={columns}
             pageSizeOptions={[5, 10, 20, 100]}
             isCellEditable={() => true}
+            onRowSelectionModelChange={(newSelection) => setSelectedId(newSelection[0] as string)}
             autoHeight
           />
         </Grid>
