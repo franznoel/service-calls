@@ -22,15 +22,13 @@ export enum Departments {
   ANESTHESIA = "Anesthesia",
   LABOR_AND_DELIVERY = "Labor and Delivery",
   OPERATING_ROOM = "Operating Room",
-  PACU = 'Operating Room Staff/PACU',
+  PACU = 'OR Staff and PACU',
   RECOVERY_ROOM = 'Recovery Room Staff',
 }
 
-export const saveSchedule = async (date: string, data: iAssignedEmployee) => {
-  console.log("schedules", date, data, data);
+export const saveSchedule = (date: string, data: iAssignedEmployee) => {
   const schedulesRef = doc(firestoreDb, "schedules", date, data.department, data.employeeId);
-  const scheduleRef = await setDoc(schedulesRef, data);
-  return scheduleRef;
+  return setDoc(schedulesRef, data);
 }
 
 export const getDepartmentSchedulesByDate = async (date: string, department: string) => {

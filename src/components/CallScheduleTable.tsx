@@ -31,7 +31,6 @@ const CallScheduleTable = ({ date, department }: any) => {
   useEffect(() => {
     getDepartmentSchedulesByDate(dateString, department)
       .then((schedules: any) => {
-        console.log('schedules', schedules);
         setSchedules(schedules);
       })
   }, [dateString, department])
@@ -63,6 +62,8 @@ const CallScheduleTable = ({ date, department }: any) => {
         department={department}
         open={open}
         handleClose={handleClose}
+        setSchedules={setSchedules}
+        schedules={schedules}
       />
     </div>
   )

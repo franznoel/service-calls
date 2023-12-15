@@ -4,15 +4,17 @@ import CallScheduleModal from "./CallScheduleModal";
 import dayjs, { Dayjs } from "dayjs";
 import { iSearch, searchEmployee } from "../models/firestore/employee";
 import { TimePicker } from "@mui/x-date-pickers";
-import { saveSchedule } from "../models/firestore/schedule";
+import { getDepartmentSchedulesByDate, saveSchedule } from "../models/firestore/schedule";
 
-const CallScheduleModalBookingForm = ({ date, department, open, handleClose }: any) => {
+const CallScheduleModalBookingForm = ({ date, department, open, handleClose, setSchedules, schedules }: any) => {
   const [timeFrom, setTimeFrom] = useState<Dayjs>(dayjs());
   const [timeTo, setTimeTo] = useState<Dayjs>(dayjs());
   const [position, setPosition] = useState<string>('RN');
   const [searchedEmployees, setSearchedEmployees] = useState<any[]>([]);
   const [searchValue, setSearchValue] = useState<null|iSearch>(null);
   const [inputValue, setInputValue] = useState('');
+
+  const dateString = date.format('YYYY-MM-DD')
 
   const submitHandler = useCallback((e: any) => {
     e.preventDefault()
@@ -28,9 +30,16 @@ const CallScheduleModalBookingForm = ({ date, department, open, handleClose }: a
       secondCall: searchedEmployees[0].phone2,
     };
 
-    saveSchedule(date.format('YYYY-MM-DD'), newSchedule);
+    saveSchedule(dateString, newSchedule)
+      .then(() => {
+        getDepartmentSchedulesByDate(dateString, department)
+          .then((schedules: any) => {
+            setSchedules(schedules)
+          });
+      });
+
     handleClose();
-  }, [date, handleClose, position, searchedEmployees, timeFrom, timeTo, department]);
+  }, [handleClose, position, searchedEmployees, timeFrom, timeTo, department, dateString, setSchedules]);
 
   const handleSearch = (value: string) => {
     setInputValue(value);

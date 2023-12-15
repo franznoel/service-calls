@@ -22,10 +22,10 @@ const PageScheduler = () => {
           </Grid>
         </Grid>
         <CallScheduleTable department={Departments.ANESTHESIA} date={date} />
-        {/* <CallScheduleTable department={Departments.LABOR_AND_DELIVERY} date={date} /> */}
-        {/* <CallScheduleTable title={Departments.OPERATING_ROOM} date={date} />
-        <CallScheduleTable title={Departments.PACU} date={date} />
-        <CallScheduleTable title={Departments.RECOVERY_ROOM} date={date} /> */}
+        <CallScheduleTable department={Departments.LABOR_AND_DELIVERY} date={date} />
+        <CallScheduleTable department={Departments.OPERATING_ROOM} date={date} />
+        <CallScheduleTable department={Departments.PACU} date={date} />
+        <CallScheduleTable department={Departments.RECOVERY_ROOM} date={date} />
       </div>
     </div>
   );
