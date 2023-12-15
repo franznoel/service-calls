@@ -1,14 +1,12 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { Autocomplete, Button, Grid, MenuItem, Select, TextField } from "@mui/material"
 import CallScheduleModal from "./CallScheduleModal";
 import dayjs, { Dayjs } from "dayjs";
 import { iSearch, searchEmployee } from "../models/firestore/employee";
 import { TimePicker } from "@mui/x-date-pickers";
 import { saveSchedule } from "../models/firestore/schedule";
-import { useNavigate } from "react-router-dom";
 
-const CallScheduleModalBookingForm = ({ date, title, open, handleClose, existingSchedules }: any) => {
-  const navigate = useNavigate();
+const CallScheduleModalBookingForm = ({ date, department, open, handleClose }: any) => {
   const [timeFrom, setTimeFrom] = useState<Dayjs>(dayjs());
   const [timeTo, setTimeTo] = useState<Dayjs>(dayjs());
   const [position, setPosition] = useState<string>('RN');
@@ -16,31 +14,23 @@ const CallScheduleModalBookingForm = ({ date, title, open, handleClose, existing
   const [searchValue, setSearchValue] = useState<null|iSearch>(null);
   const [inputValue, setInputValue] = useState('');
 
-  const submitHandler = (e: any) => {
+  const submitHandler = useCallback((e: any) => {
     e.preventDefault()
     const newSchedule = {
       timeFrom: timeFrom.format('HH:mm'),
       timeTo: timeTo.format('HH:mm'),
-      title: position,
+      position,
       id:  searchedEmployees[0].id,
       employeeId: searchedEmployees[0].id,
       fullName: searchedEmployees[0].label,
-      department: title,
+      department: department,
       firstCall: searchedEmployees[0].phone1,
       secondCall: searchedEmployees[0].phone2,
     };
 
-    const schedule = {
-      date: date.format('YYYY-MM-DD'),
-      schedules: [
-        newSchedule,
-        ...existingSchedules
-      ]
-    }
-
-    saveSchedule(schedule);
-    navigate(0);
-  }
+    saveSchedule(date.format('YYYY-MM-DD'), newSchedule);
+    handleClose();
+  }, [date, handleClose, position, searchedEmployees, timeFrom, timeTo, department]);
 
   const handleSearch = (value: string) => {
     setInputValue(value);
@@ -50,7 +40,7 @@ const CallScheduleModalBookingForm = ({ date, title, open, handleClose, existing
   }
 
   return (
-    <CallScheduleModal title={title} open={open} handleClose={handleClose}>
+    <CallScheduleModal title={department} open={open} handleClose={handleClose}>
       <form onSubmit={submitHandler}>
         <Grid container spacing={2}>
           <Grid item xs={12}>

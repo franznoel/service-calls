@@ -1,15 +1,16 @@
 import { firestoreDb } from "../../config/firebase";
-import { setDoc, doc, getDoc } from "firebase/firestore";
+import { setDoc, doc, getDoc, getDocs, collection } from "firebase/firestore";
 
 export interface iAssignedEmployee {
   id?: string
+  department: string
   timeFrom: string
   timeTo: string
   employeeId: string
   fullName: string
   firstCall: string
   secondCall: string
-  title: string
+  position: string
 }
 
 export interface iSchedule {
@@ -25,13 +26,21 @@ export enum Departments {
   RECOVERY_ROOM = 'Recovery Room Staff',
 }
 
-export const saveSchedule = async (data: iSchedule) => {
-  const schedulesRef = doc(firestoreDb, "schedules", data.date);
+export const saveSchedule = async (date: string, data: iAssignedEmployee) => {
+  console.log("schedules", date, data, data);
+  const schedulesRef = doc(firestoreDb, "schedules", date, data.department, data.employeeId);
   const scheduleRef = await setDoc(schedulesRef, data);
   return scheduleRef;
 }
 
-export const getSchedulesByDate = (date: string) => {
-  const schedulesRef = doc(firestoreDb, "schedules", date);
-  return getDoc(schedulesRef);
+export const getDepartmentSchedulesByDate = async (date: string, department: string) => {
+  const departmentSchedulesRef = getDocs(collection(firestoreDb, "schedules", date, department))
+    .then((departmentSchedSnap) => {
+      if (departmentSchedSnap.empty) {
+        return [];
+      }
+      return departmentSchedSnap.docs.map((doc) => doc.data() as iAssignedEmployee)
+    });
+  return departmentSchedulesRef;
+
 }
