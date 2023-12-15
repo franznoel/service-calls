@@ -8,8 +8,14 @@ import { Departments } from "../models/firestore/schedule";
 import {useState } from "react";
 
 const PageScheduler = () => {
-  const [date, setDate] = useState<Dayjs>(dayjs());
+  const sessionDate = sessionStorage.getItem('date');
+  const [date, setDate] = useState<Dayjs>(!sessionDate ? dayjs() : dayjs(sessionDate));
   const dateString = dayjs(date).format('MMMM D, YYYY, dddd');
+
+  const handleDateChange = (newDate: any) => {
+    setDate(newDate);
+    sessionStorage.setItem('date', newDate);
+  }
 
   return (
     <div>
@@ -19,7 +25,7 @@ const PageScheduler = () => {
         <Grid container spacing={2}>
           <Grid item xs={12}>
             <Typography variant="body1">{dateString}</Typography>
-            <DatePicker label="Date" value={date} sx={{ width: 400 }} onChange={(newDate: any) => setDate(newDate)}/>
+            <DatePicker label="Date" value={date} sx={{ width: 400 }} onChange={(newDate: any) => handleDateChange(newDate)}/>
           </Grid>
         </Grid>
         <CallScheduleTable department={Departments.ANESTHESIA} date={date} />
