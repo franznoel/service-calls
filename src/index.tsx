@@ -7,6 +7,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import PageSchedule from './pages/PageSchedule';
 import PageDirectory, { directoryLoader } from './pages/PageDirectory';
+import PageLogin from './pages/LoginPage';
 
 const router = createBrowserRouter([
   {
@@ -22,6 +23,10 @@ const router = createBrowserRouter([
     element: <PageDirectory />,
     loader: directoryLoader,
   },
+  {
+    path: '/login',
+    element: <PageLogin />,
+  }
 ]);
 
 const root = ReactDOM.createRoot(
