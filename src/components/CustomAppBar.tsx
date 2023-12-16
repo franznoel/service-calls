@@ -12,7 +12,6 @@ const CustomAppBar = () => {
   };
 
   const handleClose = () => {
-    authContext.handleLogout();
     setAnchorEl(null);
   };
 
@@ -39,17 +38,21 @@ const CustomAppBar = () => {
               anchorEl={anchorEl}
               anchorOrigin={{
                 vertical: 'top',
-                horizontal: 'right',
+                horizontal: 'left',
               }}
               keepMounted
               transformOrigin={{
                 vertical: 'top',
-                horizontal: 'right',
+                horizontal: 'left',
               }}
               open={Boolean(anchorEl)}
               onClose={handleClose}
+              sx={{
+                mt: '2rem',
+                display: { xs: 'block', md: 'block' },
+              }}
             >
-              <MenuItem onClick={handleClose}>Logout</MenuItem>
+              <MenuItem onClick={()=>authContext.handleLogout()}>Logout</MenuItem>
             </Menu>
           </div>
         )}

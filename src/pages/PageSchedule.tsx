@@ -1,4 +1,4 @@
-import { Grid, Typography } from "@mui/material";
+import { Button, Grid, Typography } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
 import dayjs, { Dayjs } from "dayjs";
 import CallScheduleTable from "../components/CallScheduleTable";
@@ -6,6 +6,8 @@ import CustomAppBar from "../components/CustomAppBar";
 import CustomTabs from "../components/CustomTabs";
 import { Departments } from "../models/firestore/schedule";
 import {useState } from "react";
+import { PrintOutlined } from "@mui/icons-material";
+import pdfScheduleReport from "../services/print-schedule-report";
 
 const PageScheduler = () => {
   const sessionDate = sessionStorage.getItem('date');
@@ -17,6 +19,11 @@ const PageScheduler = () => {
     sessionStorage.setItem('date', newDate);
   }
 
+  const handlePrint = () => {
+    // window.print();
+    pdfScheduleReport.save(`schedule-${date.format('YYYY-MM-DD')}.pdf`);
+  }
+
   return (
     <div>
       <CustomAppBar />
@@ -26,6 +33,9 @@ const PageScheduler = () => {
           <Grid item xs={12}>
             <Typography variant="body1">{dateString}</Typography>
             <DatePicker label="Date" value={date} sx={{ width: 400 }} onChange={(newDate: any) => handleDateChange(newDate)}/>
+            <Button onClick={handlePrint} variant="outlined" sx={{ padding: '1rem 0', float: 'right' }}>
+              <PrintOutlined />
+            </Button>
           </Grid>
         </Grid>
         <CallScheduleTable department={Departments.ANESTHESIA} date={date} />

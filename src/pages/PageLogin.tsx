@@ -16,7 +16,6 @@ const PageLogin = () => {
     e.preventDefault();
     signInWithEmailAndPassword(firebaseAuth, email, password)
       .then((credential) => {
-        console.log('credential', credential);
         sessionStorage.setItem('user', JSON.stringify(credential.user));
         authContext.setCurrentUser(credential.user);
       })
