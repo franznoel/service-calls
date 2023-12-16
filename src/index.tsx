@@ -7,25 +7,42 @@ import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import PageSchedule from './pages/PageSchedule';
 import PageDirectory, { directoryLoader } from './pages/PageDirectory';
-import PageLogin from './pages/LoginPage';
+import PageLogin from './pages/PageLogin';
+import AuthProvider from './context/AuthProviderContext';
 
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <PageSchedule />,
+    element: (
+      <AuthProvider>
+        <PageSchedule />
+      </AuthProvider>
+    ),
   },
   {
     path: '/schedules',
-    element: <PageSchedule />,
+    element: (
+      <AuthProvider>
+        <PageSchedule />
+      </AuthProvider>
+    ),
   },
   {
     path: '/directory',
-    element: <PageDirectory />,
+    element: (
+      <AuthProvider>
+        <PageDirectory />
+      </AuthProvider>
+    ),
     loader: directoryLoader,
   },
   {
     path: '/login',
-    element: <PageLogin />,
+    element: (
+      <AuthProvider>
+        <PageLogin />
+      </AuthProvider>
+    ),
   }
 ]);
 

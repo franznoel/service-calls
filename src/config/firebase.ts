@@ -24,4 +24,5 @@ if (isDevelopment) {
 export {
   firebaseApp,
   firestoreDb,
+  firebaseAuth,
 };
