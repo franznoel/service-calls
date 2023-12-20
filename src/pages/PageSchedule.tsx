@@ -7,7 +7,7 @@ import CustomTabs from "../components/CustomTabs";
 import { Departments } from "../models/firestore/schedule";
 import {useState } from "react";
 import { PrintOutlined } from "@mui/icons-material";
-import pdfScheduleReport from "../services/print-schedule-report";
+import saveScheduleReport from "../services/print-schedule-report";
 
 const PageScheduler = () => {
   const sessionDate = sessionStorage.getItem('date');
@@ -21,7 +21,7 @@ const PageScheduler = () => {
 
   const handlePrint = () => {
     // window.print();
-    pdfScheduleReport.save(`schedule-${date.format('YYYY-MM-DD')}.pdf`);
+    saveScheduleReport(date);
   }
 
   return (
