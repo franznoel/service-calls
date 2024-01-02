@@ -20,7 +20,6 @@ const PageScheduler = () => {
   }
 
   const handlePrint = () => {
-    // window.print();
     saveScheduleReport(date);
   }
 
