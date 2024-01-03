@@ -56,7 +56,6 @@ const getBody = (assignedEmployees: iAssignedEmployee[]) => {
 
 const generateTable = async(doc: jsPDF, dateString: string, startY: number) => {
   const header = ['Time From', 'Time To', 'Position', 'Name', '1st Call', '2nd Call', 'Called By', 'Time Responded'];
-  // TODO: pdfScheduleReport.text(departmentName, 0.5, 0.5);
   const [anesthesiaSchedule, laborSchedule, orSchedule, pacuSchedule, recoverySchedule] = await Promise.all([
     getDepartmentSchedulesByDate(dateString, Departments.ANESTHESIA),
     getDepartmentSchedulesByDate(dateString, Departments.LABOR_AND_DELIVERY),
