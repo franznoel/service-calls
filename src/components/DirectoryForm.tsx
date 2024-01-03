@@ -17,7 +17,11 @@ const DirectoryForm = ({ title, open, handleClose }: any) => {
       phone2,
       employmentStatus
     };
-    saveEmployee(employee)
+    saveEmployee(employee);
+    setFullName('');
+    setPhone1('');
+    setPhone2('');
+    setEmploymentStatus('fullTime');
     handleClose();
   }
 
