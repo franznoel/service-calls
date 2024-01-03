@@ -2,6 +2,7 @@ import { Dayjs } from 'dayjs';
 import jsPdf, { jsPDF } from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import { Departments, getDepartmentSchedulesByDate, iAssignedEmployee } from '../models/firestore/schedule';
+import { bottomNote, bottomMidNote, bottomLeftNote, bottomRightNote } from '../config/notes';
 
 const createFields = (doc: jsPDF, startY: number) => {
   // Staffing
@@ -94,44 +95,9 @@ const generateTable = async(doc: jsPDF, dateString: string, startY: number) => {
   });
 }
 
-const createBottomNote = (doc: jsPDF, startY: number) => {
-  const startX = 0.6;
-  doc.setFontSize(6);
-  doc.text(`CALL IN THIS ORDER: CRNA, OR, ORT, RR\n
-  PLEASE NOTIFY ANESTHESIOLOGIST ON CALL (BEEPER # 1034) WHEN STAFF HAVE RESPONDED`, startX, startY + 0.60);
-}
-
-const createBottomLeftNote = (doc: jsPDF, startY: number) => {
-  const startX = 0.6;
-  doc.setFontSize(8);
-  doc.text(`SPD\n
-  SPD TECHNICIAN x3040\n
-  STERILE PROCESSING x2197 Press #1\n
-  SUPERVISOR: PIERO (310) 429-9380\n
-  MANAGER: LIZA (760) 646-6355 OR (310) 351-6508
-  `, startX, startY + 0.60);
-}
-
-const createBottomMidNote = (doc: jsPDF, startY: number) => {
-  const startX = 5.6;
-  doc.setFontSize(8);
-  doc.text(`ON-CALL\n
-  Monday - Friday Start Time:\n
-  2245-0645AM\n
-  Weekend Holiday Start Time:\n
-  0645AM-1845PM\n
-  Only CRNA work 24 hour shift\n
-  occasionally
-  `, startX, startY + 0.60);
-}
-
-const createBottomRightNote = (doc: jsPDF, startY: number) => {
-  const startX = 8.75;
-  doc.setTextColor(0, 0, 0);
-  doc.setFontSize(8);
-  doc.text(`If by accident the number are wrong,\n
-  please check telephone directory\n
-  staple with the on-call schedule`, startX, startY);
+const createNote = (doc: jsPDF, { note, startX, startY, fontSize }: any) => {
+  doc.setFontSize(fontSize).setLineHeightFactor(1);
+  doc.text(note, startX, startY + 0.60);
 }
 
 const saveScheduleReport = async (date: Dayjs) => {
@@ -140,18 +106,14 @@ const saveScheduleReport = async (date: Dayjs) => {
 
   createFields(pdfScheduleReport, 0.5);
   createTitle(pdfScheduleReport, 0.9);
-  createDate(pdfScheduleReport, 1.1, date);
+  createDate(pdfScheduleReport, 1.15, date);
 
-  await generateTable(pdfScheduleReport, dateString, 1.5);
-  // await generateTable(pdfScheduleReport, dateString, Departments.LABOR_AND_DELIVERY, 2.5);
-  // await generateTable(pdfScheduleReport, dateString, Departments.OPERATING_ROOM, 3.5);
-  // await generateTable(pdfScheduleReport, dateString, Departments.PACU, 4.5);
-  // await generateTable(pdfScheduleReport, dateString, Departments.RECOVERY_ROOM, 5.5);
+  await generateTable(pdfScheduleReport, dateString, 1.25);
 
-  createBottomNote(pdfScheduleReport, 5.5);
-  createBottomLeftNote(pdfScheduleReport, 6);
-  createBottomMidNote(pdfScheduleReport, 6);
-  createBottomRightNote(pdfScheduleReport, 6.5);
+  createNote(pdfScheduleReport, { note: bottomNote, startX: 0.6, startY: 5.8, fontSize: 6, lineHeight: 0.6 });
+  createNote(pdfScheduleReport, { note: bottomLeftNote, startX: 0.6, startY: 6.25, fontSize: 8, lineHeight: 0.6 });
+  createNote(pdfScheduleReport, { note: bottomMidNote, startX: 5.5, startY: 6.25, fontSize: 8, lineHeight: 0.6 });
+  createNote(pdfScheduleReport, { note: bottomRightNote, startX: 8.75, startY: 6.25, fontSize: 8, lineHeight: 0.6 });
 
   pdfScheduleReport.save(`schedule-${date.format('YYYY-MM-DD')}.pdf`);
 }
