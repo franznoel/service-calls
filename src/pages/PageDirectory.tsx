@@ -5,7 +5,7 @@ import { Button, Grid, Stack, Typography } from "@mui/material";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import DirectoryForm from "../components/DirectoryForm";
 import { deleteEmployee, getEmployees } from "../models/firestore/employee";
-import { useLoaderData, useNavigate } from "react-router-dom";
+import { useLoaderData } from "react-router-dom";
 
 const columns = [
   { field: 'fullName', headerName: 'Full Name', width: 300 },
@@ -15,7 +15,6 @@ const columns = [
 ];
 
 const PageDirectory = () => {
-  const navigate = useNavigate();
   const data: any = useLoaderData();
   const [employees, setEmployees] = useState<any[]>(data.employees ?? []);
   const [open, setOpen] = useState(false);
@@ -27,7 +26,7 @@ const PageDirectory = () => {
 
   const handleClose = () => {
     setOpen(false);
-    navigate('.', { replace: true });
+    getEmployees().then((newEmployees) => setEmployees(newEmployees));
   };
 
   const handleDelete = () => {
