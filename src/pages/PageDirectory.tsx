@@ -17,6 +17,7 @@ const columns = [
 const PageDirectory = () => {
   const navigate = useNavigate();
   const data: any = useLoaderData();
+  const [employees, setEmployees] = useState<any[]>(data.employees ?? []);
   const [open, setOpen] = useState(false);
   const [selectedEmployeeId, setSelectedEmployeeId] = useState<string>('');
 
@@ -31,7 +32,7 @@ const PageDirectory = () => {
 
   const handleDelete = () => {
     deleteEmployee(selectedEmployeeId);
-    navigate('.', { replace: true });
+    setEmployees(data.employees.filter((employee: any) => employee.id !== selectedEmployeeId))
   }
 
   return (
@@ -52,7 +53,7 @@ const PageDirectory = () => {
           <Grid item xs={12}>
             <DataGrid
               columns={columns}
-              rows={data.employees ?? []}
+              rows={employees}
               pageSizeOptions={[5, 10, 20, 100]}
               isCellEditable={() => true}
               slots={{ toolbar: GridToolbar}}
