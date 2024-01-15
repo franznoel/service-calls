@@ -7,19 +7,27 @@ import { bottomNote, bottomMidNote, bottomLeftNote, bottomRightNote } from '../c
 const createFields = (doc: jsPDF, startY: number) => {
   // Staffing
   doc.setLineWidth(0.01);
-  doc.line(0.5, startY, 5.5, startY);
+  doc.line(0.5, startY, 3.25, startY);
 
   doc.setFontSize(8);
   doc.setTextColor(0, 0, 0);
-  doc.text('STAFFING', startY, 0.65);
+  doc.text('STAFFING', 0.5, startY+0.15);
 
   // Communication
   doc.setLineWidth(0.01);
-  doc.line(6, startY, 10.5, startY);
+  doc.line(6.5, startY, 3.5, startY);
 
   doc.setFontSize(8);
   doc.setTextColor(0, 0, 0);
-  doc.text('COMMUNICATION', 6, 0.65);
+  doc.text('COMMUNICATION', 3.5, startY+0.15);
+
+  // Charge Nurse or Manager
+  doc.setLineWidth(0.01);
+  doc.line(6.75, startY, 10.5, startY);
+
+  doc.setFontSize(8);
+  doc.setTextColor(0, 0, 0);
+  doc.text('CHARGE NURSE OR MANAGER (Sign before sending to Nursing Office)', 6.75, startY+0.15);
 }
 
 const createTitle = (doc: jsPDF, startY: number) => {
@@ -87,7 +95,7 @@ const generateTable = async(doc: jsPDF, dateString: string, startY: number) => {
 }
 
 const createNote = (doc: jsPDF, { note, startX, startY, fontSize }: any) => {
-  doc.setFontSize(fontSize).setLineHeightFactor(1);
+  doc.setFontSize(fontSize).setLineHeightFactor(0.75);
   doc.text(note, startX, startY + 0.60);
 }
 
@@ -95,16 +103,16 @@ const saveScheduleReport = async (date: Dayjs) => {
   const dateString = date.format('YYYY-MM-DD');
   const pdfScheduleReport = new jsPdf('l', 'in', [8.5, 11]);
 
-  createFields(pdfScheduleReport, 0.5);
-  createTitle(pdfScheduleReport, 0.9);
-  createDate(pdfScheduleReport, 1.15, date);
+  createFields(pdfScheduleReport, 0.75);
+  createTitle(pdfScheduleReport, 1.15);
+  createDate(pdfScheduleReport, 1.35, date);
 
-  await generateTable(pdfScheduleReport, dateString, 1.25);
+  await generateTable(pdfScheduleReport, dateString, 1.5);
 
-  createNote(pdfScheduleReport, { note: bottomNote, startX: 0.6, startY: 5.8, fontSize: 6, lineHeight: 0.6 });
-  createNote(pdfScheduleReport, { note: bottomLeftNote, startX: 0.6, startY: 6.25, fontSize: 8, lineHeight: 0.6 });
-  createNote(pdfScheduleReport, { note: bottomMidNote, startX: 5.5, startY: 6.25, fontSize: 8, lineHeight: 0.6 });
-  createNote(pdfScheduleReport, { note: bottomRightNote, startX: 8.75, startY: 6.25, fontSize: 8, lineHeight: 0.6 });
+  createNote(pdfScheduleReport, { note: bottomNote, startX: 0.6, startY: 6.20, fontSize: 6, lineHeight: 0.6 });
+  createNote(pdfScheduleReport, { note: bottomLeftNote, startX: 0.6, startY: 6.5, fontSize: 8, lineHeight: 0.6 });
+  createNote(pdfScheduleReport, { note: bottomMidNote, startX: 5.5, startY: 6.5, fontSize: 8, lineHeight: 0.6 });
+  createNote(pdfScheduleReport, { note: bottomRightNote, startX: 8.75, startY: 6.5, fontSize: 8, lineHeight: 0.6 });
 
   pdfScheduleReport.save(`schedule-${date.format('YYYY-MM-DD')}.pdf`);
 }

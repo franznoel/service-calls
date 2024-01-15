@@ -23,7 +23,7 @@ export enum Departments {
   LABOR_AND_DELIVERY = "Labor and Delivery",
   OPERATING_ROOM = "Operating Room",
   PACU = 'OR Staff and PACU',
-  RECOVERY_ROOM = 'Recovery Room Staff',
+  RECOVERY_ROOM = 'Recovery Room',
 }
 
 export const saveSchedule = (date: string, data: iAssignedEmployee) => {
