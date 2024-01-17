@@ -64,23 +64,27 @@ const getBody = (assignedEmployees: iAssignedEmployee[]) => {
 
 const generateTable = async(doc: jsPDF, dateString: string, startY: number) => {
   const header = ['Time From', 'Time To', 'Position', 'Name', '1st Call', '2nd Call', 'Called By', 'Time Responded'];
-  const [orSchedule, pacuSchedule, recoverySchedule] = await Promise.all([
+  const [anesthesiaSchedule, managerSchedule, orSchedule, recoverySchedule] = await Promise.all([
+    getDepartmentSchedulesByDate(dateString, Departments.ANESTHESIA),
+    getDepartmentSchedulesByDate(dateString, Departments.MANAGER_ON_CALL),
     getDepartmentSchedulesByDate(dateString, Departments.OPERATING_ROOM),
-    getDepartmentSchedulesByDate(dateString, Departments.PACU),
     getDepartmentSchedulesByDate(dateString, Departments.RECOVERY_ROOM),
   ]);
 
+  const anesthesiaBody = getBody(anesthesiaSchedule);
+  const managerBody = getBody(managerSchedule);
   const orBody = getBody(orSchedule);
-  const pacuBody = getBody(pacuSchedule);
   const recoveryBody = getBody(recoverySchedule);
 
   autoTable(doc, {
     head: [header],
     body: [
+      [{ content: Departments.ANESTHESIA, colSpan: 8, styles: { halign: 'left', fillColor: '#efefef' }}],
+      ...anesthesiaBody,
+      [{ content: Departments.MANAGER_ON_CALL, colSpan: 8, styles: { halign: 'left', fillColor: '#efefef' }}],
+      ...managerBody,
       [{ content: Departments.OPERATING_ROOM, colSpan: 8, styles: { halign: 'left', fillColor: '#efefef' }}],
       ...orBody,
-      [{ content: Departments.PACU, colSpan: 8, styles: { halign: 'left', fillColor: '#efefef' }}],
-      ...pacuBody,
       [{ content: Departments.RECOVERY_ROOM, colSpan: 8, styles: { halign: 'left', fillColor: '#efefef' }}],
       ...recoveryBody,
     ],

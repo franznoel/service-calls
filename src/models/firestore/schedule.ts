@@ -20,6 +20,7 @@ export interface iSchedule {
 
 export enum Departments {
   ANESTHESIA = "Anesthesia",
+  MANAGER_ON_CALL = "Manager On Call",
   LABOR_AND_DELIVERY = "Labor and Delivery",
   OPERATING_ROOM = "Operating Room",
   PACU = 'OR Staff and PACU',

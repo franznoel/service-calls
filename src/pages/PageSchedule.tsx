@@ -37,8 +37,9 @@ const PageScheduler = () => {
             </Button>
           </Grid>
         </Grid>
+        <CallScheduleTable department={Departments.ANESTHESIA} date={date} />
+        <CallScheduleTable department={Departments.MANAGER_ON_CALL} date={date} />
         <CallScheduleTable department={Departments.OPERATING_ROOM} date={date} />
-        <CallScheduleTable department={Departments.PACU} date={date} />
         <CallScheduleTable department={Departments.RECOVERY_ROOM} date={date} />
       </div>
     </div>
