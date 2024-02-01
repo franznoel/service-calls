@@ -1,16 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { Button, Divider, Grid, Stack, Typography } from "@mui/material";
-import { DataGrid } from "@mui/x-data-grid";
+import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import CallScheduleModalBookingForm from "./CallScheduleModalBookingForm";
 import { deleteSchedule, getDepartmentSchedulesByDate, iAssignedEmployee } from "../models/firestore/schedule";
+import { phoneFormat } from "../helpers/gridHelpers";
 
-const columns = [
+const columns: GridColDef[] = [
   { field: 'timeFrom', headerName: 'Time From', width: 100 },
   { field: 'timeTo', headerName: 'Time To', width: 100 },
   { field: 'position', headerName: 'Position', width: 200 },
   { field: 'fullName', headerName: 'Name', width: 200 },
-  { field: 'firstCall', headerName: '1st Call', width: 200 },
-  { field: 'secondCall', headerName: '2nd Call', width: 200 },
+  { field: 'firstCall', headerName: '1st Call', width: 200, valueFormatter: phoneFormat },
+  { field: 'secondCall', headerName: '2nd Call', width: 200, valueFormatter: phoneFormat },
   { field: 'calledBy', headerName: 'Called By', width: 200 },
   { field: 'timeResponded', headerName: 'Time Responded', width: 200 },
 ];

@@ -6,11 +6,12 @@ import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import DirectoryForm from "../components/DirectoryForm";
 import { deleteEmployee, getEmployees } from "../models/firestore/employee";
 import { useLoaderData } from "react-router-dom";
+import { phoneFormat } from "../helpers/gridHelpers";
 
 const columns = [
   { field: 'fullName', headerName: 'Full Name', width: 300 },
-  { field: 'phone1', headerName: 'Phone 1', width: 200 },
-  { field: 'phone2', headerName: 'Phone 2', width: 200 },
+  { field: 'phone1', headerName: 'Phone 1', width: 200, valueFormatter: phoneFormat },
+  { field: 'phone2', headerName: 'Phone 2', width: 200, valueFormatter: phoneFormat },
   { field: 'employmentStatus', headerName: 'Employment Status', width: 300 },
 ];
 
