@@ -3,6 +3,7 @@ import jsPdf, { jsPDF } from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import { Departments, getDepartmentSchedulesByDate, iAssignedEmployee } from '../models/firestore/schedule';
 import { bottomNote, bottomMidNote, bottomLeftNote, bottomRightNote } from '../config/notes';
+import { pdfPhoneFormat } from '../helpers/pdfHelper';
 
 const createFields = (doc: jsPDF, startY: number) => {
   // Staffing
@@ -54,8 +55,8 @@ const getBody = (assignedEmployees: iAssignedEmployee[]) => {
     schedule.timeTo,
     schedule.position,
     schedule.fullName,
-    schedule.firstCall,
-    schedule.secondCall,
+    pdfPhoneFormat(schedule.firstCall),
+    pdfPhoneFormat(schedule.secondCall),
     '',
     ''
   ]);
