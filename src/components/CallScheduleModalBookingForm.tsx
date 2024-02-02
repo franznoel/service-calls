@@ -67,6 +67,7 @@ const CallScheduleModalBookingForm = ({ date, department, open, handleClose, set
               <MenuItem value="CRNA">CRNA</MenuItem>
               <MenuItem value="ORT">OR Tech</MenuItem>
               <MenuItem value="ORT">On Call Training</MenuItem>
+              <MenuItem value="MGR">MGR</MenuItem>
             </Select>
           </Grid>
           <Grid item xs={12}>
