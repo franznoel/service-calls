@@ -3,7 +3,7 @@ import jsPdf, { jsPDF } from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import { Departments, getDepartmentSchedulesByDate, iAssignedEmployee } from '../models/firestore/schedule';
 import { bottomNote, bottomMidNote, bottomLeftNote, bottomRightNote } from '../config/notes';
-import { pdfPhoneFormat } from '../helpers/pdfHelper';
+import { convertTime12to24, pdfPhoneFormat } from '../helpers/pdfHelper';
 
 const createFields = (doc: jsPDF, startY: number) => {
   // Staffing
@@ -59,7 +59,11 @@ const getBody = (assignedEmployees: iAssignedEmployee[]) => {
     pdfPhoneFormat(schedule.secondCall),
     '',
     ''
-  ]);
+  ]).sort(([schedATimeFrom], [schedBTimeFrom]) => {
+    const [h1, m1] = convertTime12to24(schedATimeFrom);
+    const [h2, m2] = convertTime12to24(schedBTimeFrom);
+    return h1 - h2 || m1 - m2;
+  });
   return body ?? [];
 }
 
