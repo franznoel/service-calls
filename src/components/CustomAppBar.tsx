@@ -1,4 +1,4 @@
-import { AppBar, Box, Container, IconButton, Menu, MenuItem, Toolbar, Typography } from "@mui/material"
+import { AppBar, Box, Container, Divider, IconButton, ListItem, Menu, MenuItem, Toolbar, Typography } from "@mui/material"
 import { AuthProviderContext } from "../context/AuthProviderContext";
 import { useContext, useState } from "react";
 import { AccountCircle } from "@mui/icons-material";
@@ -46,6 +46,7 @@ const CustomAppBar = (props: any) => {
                 color="inherit"
                 sx={{ flexGrow: 1, display: 'flex' }}
               >
+                <Typography variant="body1" sx={{ mr: 1 }}>{authContext.currentUser.displayName}</Typography>
                 <AccountCircle />
               </IconButton>
 
@@ -68,6 +69,8 @@ const CustomAppBar = (props: any) => {
                   display: 'block',
                 }}
               >
+                <ListItem>{authContext.currentUser.displayName} ({authContext.currentUser.email})</ListItem>
+                <Divider />
                 <MenuItem onClick={()=>authContext.handleLogout()}>Logout</MenuItem>
               </Menu>
             </Box>
