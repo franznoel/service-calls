@@ -1,5 +1,5 @@
 import { firestoreDb } from "../../config/firebase";
-import { addDoc, collection, deleteDoc, doc, getDocs, getDoc } from "firebase/firestore";
+import { addDoc, collection, deleteDoc, doc, getDocs, getDoc, updateDoc } from "firebase/firestore";
 
 export interface iEmployee {
   fullName: string
@@ -15,6 +15,12 @@ export interface iSearch {
 
 export const saveEmployee = async (data: iEmployee) => {
   const employeeRef = await addDoc(collection(firestoreDb, "employees"), data);
+  return employeeRef;
+}
+
+export const updateEmployee = async (employeeId: string, data: any) => {
+  console.log('employeeId, data', employeeId, data);
+  const employeeRef = await updateDoc(doc(firestoreDb, "employees", employeeId), data);
   return employeeRef;
 }
 

@@ -3,15 +3,21 @@ import CustomAppBar from "../components/CustomAppBar";
 import { Button, Grid, Stack, Typography } from "@mui/material";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import DirectoryForm from "../components/DirectoryForm";
-import { deleteEmployee, getEmployees } from "../models/firestore/employee";
+import { deleteEmployee, getEmployees, updateEmployee } from "../models/firestore/employee";
 import { useLoaderData } from "react-router-dom";
 import { phoneFormat } from "../helpers/gridHelpers";
 
+const employmentStatusOptions = [
+  { value: 'fullTime', label: 'Full Time' },
+  { value: 'perDiem', label: 'Per Diem' },
+  { value: 'partTime', label: 'Part Time' },
+]
+
 const columns = [
-  { field: 'fullName', headerName: 'Full Name', width: 300 },
-  { field: 'phone1', headerName: 'Phone 1', width: 200, valueFormatter: phoneFormat },
-  { field: 'phone2', headerName: 'Phone 2', width: 200, valueFormatter: phoneFormat },
-  { field: 'employmentStatus', headerName: 'Employment Status', width: 300 },
+  { field: 'fullName', headerName: 'Full Name', width: 300, editable: true },
+  { field: 'phone1', headerName: 'Phone 1', width: 200, valueFormatter: phoneFormat, editable: true },
+  { field: 'phone2', headerName: 'Phone 2', width: 200, valueFormatter: phoneFormat, editable: true },
+  { field: 'employmentStatus', headerName: 'Employment Status', width: 300, editable: true, type: 'singleSelect', valueOptions: employmentStatusOptions },
 ];
 
 const PageDirectory = () => {
@@ -29,10 +35,21 @@ const PageDirectory = () => {
     getEmployees().then((newEmployees) => setEmployees(newEmployees));
   };
 
+  const handleRowUpdate = (updatedRow: any, originalRow: any) => {
+    const { fullName, phone1, phone2, employmentStatus } = updatedRow;
+    updateEmployee(updatedRow.id, { fullName, phone1, phone2, employmentStatus })
+    return updatedRow;
+  }
+
+  const handleRowError = (error: any) => {
+    console.log('error', error)
+  }
+
   const handleDelete = () => {
     deleteEmployee(selectedEmployeeId);
     setEmployees(data.employees.filter((employee: any) => employee.id !== selectedEmployeeId))
   }
+
 
   return (
     <div>
@@ -56,6 +73,9 @@ const PageDirectory = () => {
               isCellEditable={() => true}
               slots={{ toolbar: GridToolbar}}
               onRowSelectionModelChange={(employeeId: any) => setSelectedEmployeeId(employeeId[0])}
+              editMode="row"
+              processRowUpdate={handleRowUpdate}
+              onProcessRowUpdateError={handleRowError}
               autoHeight
             />
           </Grid>
