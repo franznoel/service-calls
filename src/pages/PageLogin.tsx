@@ -32,7 +32,7 @@ const PageLogin = () => {
 
   return (
     <div>
-      <CustomAppBar />
+      <CustomAppBar currentPage='directory' />
       <Card sx={{ m: '3rem auto', width: 400 }}>
         <CardContent>
           <div style={{ textAlign: 'center' }}>

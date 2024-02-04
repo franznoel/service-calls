@@ -3,7 +3,6 @@ import { DatePicker } from "@mui/x-date-pickers";
 import dayjs, { Dayjs } from "dayjs";
 import CallScheduleTable from "../components/CallScheduleTable";
 import CustomAppBar from "../components/CustomAppBar";
-import CustomTabs from "../components/CustomTabs";
 import { Departments } from "../models/firestore/schedule";
 import {useState } from "react";
 import { PrintOutlined } from "@mui/icons-material";
@@ -25,8 +24,7 @@ const PageScheduler = () => {
 
   return (
     <div>
-      <CustomAppBar />
-      <CustomTabs page="schedules" />
+      <CustomAppBar currentPage='schedules' />
       <div style={{ margin: '1rem' }}>
         <Grid container spacing={2}>
           <Grid item xs={12}>

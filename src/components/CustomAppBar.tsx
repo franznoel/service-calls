@@ -1,9 +1,11 @@
-import { AppBar, IconButton, Menu, MenuItem, Toolbar, Typography } from "@mui/material"
+import { AppBar, Box, Container, IconButton, Menu, MenuItem, Toolbar, Typography } from "@mui/material"
 import { AuthProviderContext } from "../context/AuthProviderContext";
 import { useContext, useState } from "react";
 import { AccountCircle } from "@mui/icons-material";
+import CustomTabs from "./CustomTabs";
 
-const CustomAppBar = () => {
+const CustomAppBar = (props: any) => {
+  const { currentPage } = props;
   const authContext = useContext<any>(AuthProviderContext);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
 
@@ -17,46 +19,61 @@ const CustomAppBar = () => {
 
   return (
     <AppBar position="static">
-      <Toolbar>
-        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-          Service Call Schedules
-        </Typography>
-        {authContext.currentUser && (
-          <div>
-            <IconButton
-              size="large"
-              aria-label="account of current user"
-              aria-controls="menu-appbar"
-              aria-haspopup="true"
-              onClick={handleMenu}
-              color="inherit"
-            >
-              <AccountCircle />
-            </IconButton>
-            <Menu
-              id="menu-appbar"
-              anchorEl={anchorEl}
-              anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'left',
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'left',
-              }}
-              open={Boolean(anchorEl)}
-              onClose={handleClose}
-              sx={{
-                mt: '2rem',
-                display: { xs: 'block', md: 'block' },
-              }}
-            >
-              <MenuItem onClick={()=>authContext.handleLogout()}>Logout</MenuItem>
-            </Menu>
-          </div>
-        )}
-      </Toolbar>
+      <Container maxWidth="xl">
+        <Toolbar disableGutters>
+          <Typography
+            variant="h6"
+            component="div"
+            sx={{
+              mr: 2,
+              flexGrow: 1,
+              display: 'flex',
+              color: 'inherit',
+              textDecoration: 'none',
+            }}
+          >
+            Service Call Schedules
+          </Typography>
+          <CustomTabs page={currentPage} />
+          {authContext && authContext.currentUser && (
+            <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'flex' } }}>
+              <IconButton
+                size="large"
+                aria-label="account of current user"
+                aria-controls="menu-appbar"
+                aria-haspopup="true"
+                onClick={handleMenu}
+                color="inherit"
+                sx={{ flexGrow: 1, display: 'flex' }}
+              >
+                <AccountCircle />
+              </IconButton>
+
+              <Menu
+                id="menu-appbar"
+                anchorEl={anchorEl}
+                anchorOrigin={{
+                  vertical: 'top',
+                  horizontal: 'left',
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: 'top',
+                  horizontal: 'left',
+                }}
+                open={Boolean(anchorEl)}
+                onClose={handleClose}
+                sx={{
+                  mt: '2rem',
+                  display: 'block',
+                }}
+              >
+                <MenuItem onClick={()=>authContext.handleLogout()}>Logout</MenuItem>
+              </Menu>
+            </Box>
+          )}
+        </Toolbar>
+      </Container>
     </AppBar>
   )
 }

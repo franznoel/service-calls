@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import CustomAppBar from "../components/CustomAppBar";
-import CustomTabs from "../components/CustomTabs";
 import { Button, Grid, Stack, Typography } from "@mui/material";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import DirectoryForm from "../components/DirectoryForm";
@@ -37,8 +36,7 @@ const PageDirectory = () => {
 
   return (
     <div>
-      <CustomAppBar />
-      <CustomTabs page="directory" />
+      <CustomAppBar currentPage='directory' />
       <div style={{ margin: '1rem' }}>
         <Grid container spacing={2}>
           <Grid item xs={12}>
